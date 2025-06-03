@@ -1,7 +1,13 @@
 REM Preemptively inject interface name to settings class definition so that these settings can be referenced in other projects
 
 REM %1 is solution dir, %2 is project dir
-%1\ExternalBuildTools\fart\fart.exe -r %2Properties\Settings.Designer.cs "global::System.Configuration.ApplicationSettingsBase {" "global::System.Configuration.ApplicationSettingsBase, PoorMansTSqlFormatterPluginShared.ISqlSettings {"
+
+SET fartexepath=%1ExternalBuildTools\fart\fart.exe
+
+REM Allow for solution (.sln) file in childfolder (NPP-PlugIn-Build only)
+IF NOT EXIST "%fartexepath%" SET fartexepath=%1..\ExternalBuildTools\fart\fart.exe
+
+"%fartexepath%" -r %2Properties\Settings.Designer.cs "global::System.Configuration.ApplicationSettingsBase {" "global::System.Configuration.ApplicationSettingsBase, PoorMansTSqlFormatterPluginShared.ISqlSettings {"
 
 REM standard "fart.exe" error-handling block; 9009 (missing program) is bad, anything else above 0 is OK and should be reset to 0 for standard handling
 if ERRORLEVEL 9009 (
